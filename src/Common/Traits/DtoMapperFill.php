@@ -3,6 +3,7 @@
 namespace Fnp\Dto\Common\Traits;
 
 use Fnp\Dto\Common\Flags\DtoFillFlags;
+use Fnp\Dto\Common\Flags\DtoFlags;
 use Fnp\Dto\Common\Flags\DtoToArrayFlags;
 use Fnp\Dto\Common\Helper\Iof;
 use Fnp\Dto\Common\Helper\Obj;
@@ -16,7 +17,7 @@ trait DtoMapperFill
      * @param array|mixed $items
      * @param null        $flags
      */
-    public function fill($items, $flags = NULL)
+    public function fill($items, $flags = NULL): void
     {
         if (!Arr::accessible($items) && Iof::arrayable($items)) {
             $items = $items->toArray();
@@ -33,7 +34,7 @@ trait DtoMapperFill
         }
 
         $vars  = $reflection->getProperties();
-        $flags = new DtoFillFlags($flags);
+        $flags = new DtoFlags($flags);
 
         /** @var \ReflectionProperty $var */
         foreach ($vars as $variable) {
