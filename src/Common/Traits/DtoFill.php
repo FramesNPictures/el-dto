@@ -23,7 +23,7 @@ trait DtoFill
 
         if (!Arr::accessible($items) &&
             Iof::arrayable($items) &&
-            !Iof::eloquent($items)) {
+            !Iof::eloquentModel($items)) {
             $items = $items->toArray();
         }
 

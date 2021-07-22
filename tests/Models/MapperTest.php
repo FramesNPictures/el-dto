@@ -3,7 +3,7 @@
 use Fnp\Dto\Flex\DtoModel;
 use Fnp\Dto\Mapper\MapperModel;
 
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit\Framework\TestCase
 {
     public function generateUserData()
     {

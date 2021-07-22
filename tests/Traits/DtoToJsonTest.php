@@ -1,6 +1,5 @@
 <?php
 
-
 use Fnp\Dto\Common\Flags\DtoToArrayFlags;
 use Fnp\ElHelper\Iof;
 

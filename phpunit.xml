@@ -9,11 +9,8 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Helpers">
-            <directory>./test/Helpers</directory>
-        </testsuite>
-        <testsuite name="Trait Helpers">
-            <directory>./tests/Traits</directory>
+        <testsuite name="Unit tests">
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <php>
