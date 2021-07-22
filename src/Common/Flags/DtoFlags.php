@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Fnp\Dto\Common\Flags;
-
 
 use Fnp\Dto\Flag\FlagModel;
 use ReflectionProperty;

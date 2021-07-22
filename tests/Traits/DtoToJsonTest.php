@@ -2,7 +2,7 @@
 
 
 use Fnp\Dto\Common\Flags\DtoToArrayFlags;
-use Fnp\Dto\Common\Helper\Iof;
+use Fnp\ElHelper\Iof;
 
 class DtoToJsonTest extends \PHPUnit\Framework\TestCase
 {

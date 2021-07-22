@@ -1,7 +1,7 @@
 <?php
 
-use Fnp\Dto\Common\Helper\Obj;
-use Fnp\Dto\Common\Helper\Str;
+use Fnp\ElHelper\Obj;
+use Fnp\ElHelper\Str;
 
 class ObjHelperTest extends \PHPUnit_Framework_TestCase
 {

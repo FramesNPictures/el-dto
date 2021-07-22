@@ -2,7 +2,7 @@
 
 namespace Fnp\Dto\Mapper;
 
-use Fnp\Dto\Common\Helper\Str;
+use Fnp\ElHelper\Str;
 
 class ClassMap
 {

@@ -3,7 +3,7 @@
 namespace Fnp\Dto\Config;
 
 use Fnp\Dto\Common\Traits\DtoFill;
-use Fnp\Dto\Common\Helper\Obj;
+use Fnp\ElHelper\Obj;
 
 class ConfigModel
 {

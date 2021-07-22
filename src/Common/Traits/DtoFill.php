@@ -2,8 +2,8 @@
 
 namespace Fnp\Dto\Common\Traits;
 
-use Fnp\Dto\Common\Helper\Iof;
-use Fnp\Dto\Common\Helper\Obj;
+use Fnp\ElHelper\Iof;
+use Fnp\ElHelper\Obj;
 use Illuminate\Support\Arr;
 use ReflectionProperty;
 

@@ -3,7 +3,7 @@
 namespace Fnp\Dto\Set;
 
 use Fnp\Dto\Common\Traits\DtoConstants;
-use Fnp\Dto\Common\Helper\Obj;
+use Fnp\ElHelper\Obj;
 
 class SetModel
 {

@@ -5,8 +5,8 @@ namespace Fnp\Dto\Common\Traits;
 use Fnp\Dto\Common\Flags\DtoFillFlags;
 use Fnp\Dto\Common\Flags\DtoFlags;
 use Fnp\Dto\Common\Flags\DtoToArrayFlags;
-use Fnp\Dto\Common\Helper\Iof;
-use Fnp\Dto\Common\Helper\Obj;
+use Fnp\ElHelper\Iof;
+use Fnp\ElHelper\Obj;
 use Illuminate\Support\Arr;
 
 trait DtoMapperFill
