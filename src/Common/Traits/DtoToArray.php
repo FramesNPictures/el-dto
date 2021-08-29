@@ -2,7 +2,7 @@
 
 namespace Fnp\Dto\Common\Traits;
 
-use Fnp\Dto\Common\Flags\DtoFlags;
+use Fnp\Dto\Common\Flags\Dto;
 use Fnp\ElHelper\Iof;
 use Fnp\ElHelper\Obj;
 use ReflectionProperty;
@@ -10,14 +10,14 @@ use ReflectionProperty;
 trait DtoToArray
 {
     /**
-     * @param array|int Additional flags from DtoToArrayFlags
+     * @param array|int Additional flags from Dto flags
      *
      * @return array
      * @throws \ReflectionException
      */
     public function toArray($flags = NULL)
     {
-        $flags      = new DtoFlags($flags);
+        $flags      = new Dto($flags);
         $reflection = new \ReflectionClass($this);
         $vars       = $reflection->getProperties(
             $flags->toArrayReflectionOptions()

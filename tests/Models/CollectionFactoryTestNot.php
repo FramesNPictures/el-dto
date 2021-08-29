@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Collection;
 
-class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
+class CollectionFactoryTestNot extends \PHPUnit\Framework\TestCase
 {
     public function testCollection()
     {

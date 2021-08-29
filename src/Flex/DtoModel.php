@@ -7,7 +7,7 @@ use Fnp\Dto\Common\Traits\DtoFill;
 use Fnp\Dto\Common\Traits\DtoToArray;
 use Fnp\Dto\Common\Traits\DtoToJson;
 use Fnp\Dto\Contract\DtoModelContract;
-use Fnp\Dto\Exception;
+use Fnp\Dto\Exceptions;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
@@ -47,7 +47,7 @@ abstract class DtoModel implements DtoModelContract, Arrayable
     {
         try {
             return DtoCollectionFactory::make(get_called_class(), $items, $key, $flags);
-        } catch (Exception\DtoClassNotExistsException $e) {
+        } catch (Exceptions\DtoClassNotExistsException $e) {
             return new Collection([]);
         }
     }

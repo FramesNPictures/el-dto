@@ -5,7 +5,7 @@ namespace Fnp\Dto\Mapper;
 use Fnp\Dto\Collection\DtoCollectionFactory;
 use Fnp\Dto\Common\Traits\DtoMapperFill;
 use Fnp\Dto\Common\Traits\DtoToArray;
-use Fnp\Dto\Exception\DtoClassNotExistsException;
+use Fnp\Dto\Exceptions\DtoClassNotExistsException;
 use Fnp\Dto\Flex\DtoModel;
 use Illuminate\Support\Collection;
 

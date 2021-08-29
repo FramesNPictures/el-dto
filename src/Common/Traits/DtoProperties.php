@@ -11,12 +11,6 @@ trait DtoProperties
      */
     public static function __properties($flags)
     {
-        try {
-            $reflection = new \ReflectionClass(get_called_class());
-        } catch (\ReflectionException $e) {
-            return;
-        }
 
-        return $reflection->getProperties();
     }
 }

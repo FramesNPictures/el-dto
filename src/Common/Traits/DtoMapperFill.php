@@ -3,7 +3,7 @@
 namespace Fnp\Dto\Common\Traits;
 
 use Fnp\Dto\Common\Flags\DtoFillFlags;
-use Fnp\Dto\Common\Flags\DtoFlags;
+use Fnp\Dto\Common\Flags\Dto;
 use Fnp\Dto\Common\Flags\DtoToArrayFlags;
 use Fnp\ElHelper\Iof;
 use Fnp\ElHelper\Obj;
@@ -34,7 +34,7 @@ trait DtoMapperFill
         }
 
         $vars  = $reflection->getProperties();
-        $flags = new DtoFlags($flags);
+        $flags = new Dto($flags);
 
         /** @var \ReflectionProperty $var */
         foreach ($vars as $variable) {

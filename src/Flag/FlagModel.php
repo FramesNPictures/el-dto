@@ -8,19 +8,22 @@ class FlagModel
 
     public function __construct($flags)
     {
-        if (is_null($flags))
+        if (is_null($flags)) {
             $flags = 0;
+        }
 
-        if ($flags instanceof FlagModel)
+        if ($flags instanceof FlagModel) {
             $flags = $flags->flags();
+        }
 
-        if (is_array($flags))
+        if (is_array($flags)) {
             $flags = array_sum($flags);
+        }
 
-        $this->_flags = $flags;
+        $this->_flags = (array)$flags;
     }
 
-    public static function make($flags = NULL)
+    public static function make($flags = null)
     {
         return new static($flags);
     }
@@ -34,8 +37,9 @@ class FlagModel
      */
     public function add($flags)
     {
-        if ($flags instanceof FlagModel)
+        if ($flags instanceof FlagModel) {
             $flags = $flags->flags();
+        }
 
         $this->_flags += $flags;
 
@@ -51,8 +55,9 @@ class FlagModel
      */
     public function has($flags)
     {
-        if ($flags instanceof FlagModel)
+        if ($flags instanceof FlagModel) {
             $flags = $flags->flags();
+        }
 
         return (bool)(($this->_flags & $flags) == $flags);
     }

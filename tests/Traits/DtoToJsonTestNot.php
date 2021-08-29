@@ -1,9 +1,10 @@
 <?php
 
-use Fnp\Dto\Common\Flags\DtoToArrayFlags;
+use Fnp\Dto\Common\Flags\Dto;
 use Fnp\ElHelper\Iof;
+use PHPUnit\Framework\TestCase;
 
-class DtoToJsonTest extends \PHPUnit\Framework\TestCase
+class DtoToJsonTestNot extends TestCase
 {
     /**
      * Prepare object to test
@@ -12,7 +13,7 @@ class DtoToJsonTest extends \PHPUnit\Framework\TestCase
      */
     public function prepareObject()
     {
-        $example       = new ToJsonExample();
+        $example = new ToJsonExample();
         $example->four = new ToJsonObjSerialExample();
         $example->five = new ToJsonStrSerialExample();
 
@@ -23,7 +24,7 @@ class DtoToJsonTest extends \PHPUnit\Framework\TestCase
      * @test
      * @dataProvider prepareObject
      *
-     * @param ToJsonExample $object
+     * @param  ToJsonExample  $object
      */
     public function make_sure_the_object_is_serializable(ToJsonExample $object)
     {
@@ -42,7 +43,7 @@ class DtoToJsonTest extends \PHPUnit\Framework\TestCase
      * @dataProvider prepareObject
      * @test
      *
-     * @param ToJsonExample $object
+     * @param  ToJsonExample  $object
      */
     public function make_sure_we_extract_json(ToJsonExample $object)
     {
@@ -53,13 +54,13 @@ class DtoToJsonTest extends \PHPUnit\Framework\TestCase
      * @dataProvider prepareObject
      * @test
      *
-     * @param ToJsonExample $object
+     * @param  ToJsonExample  $object
      */
     public function verify_serialization_with_default_flags(ToJsonExample $object)
     {
         $a = json_decode(
             $object->toJson(),
-            TRUE
+            true
         );
 
         $this->assertArrayHasKey('one', $a, 'One exists?');
@@ -84,13 +85,13 @@ class DtoToJsonTest extends \PHPUnit\Framework\TestCase
      * @dataProvider prepareObject
      * @test
      *
-     * @param ToJsonExample $object
+     * @param  ToJsonExample  $object
      */
     public function verify_serialization_with_string_serialization(ToJsonExample $object)
     {
         $a = json_decode(
-            $object->toJson(0, DtoToArrayFlags::SERIALIZE_STRING_PROVIDERS),
-            TRUE
+            $object->toJson(0, Dto::SERIALIZE_STRING_PROVIDERS),
+            true
         );
 
         $this->assertArrayHasKey('one', $a, 'One exists?');
@@ -118,8 +119,8 @@ class DtoToJsonTest extends \PHPUnit\Framework\TestCase
     public function verify_serialization_with_no_object_serialization(ToJsonExample $object)
     {
         $a = json_decode(
-            $object->toJson(JSON_PRETTY_PRINT, DtoToArrayFlags::DONT_SERIALIZE_OBJECTS),
-            TRUE
+            $object->toJson(JSON_PRETTY_PRINT, Dto::DONT_SERIALIZE_OBJECTS),
+            true
         );
 
         $this->assertArrayHasKey('one', $a, 'One exists?');
@@ -149,10 +150,10 @@ class DtoToJsonTest extends \PHPUnit\Framework\TestCase
         $a = json_decode(
             $object->toJson(
                 0,
-                DtoToArrayFlags::DONT_SERIALIZE_OBJECTS +
-                DtoToArrayFlags::EXCLUDE_NULLS
+                Dto::DONT_SERIALIZE_OBJECTS +
+                Dto::EXCLUDE_NULLS
             ),
-            TRUE
+            true
         );
 
         $this->assertArrayHasKey('one', $a, 'One exists?');
@@ -171,12 +172,12 @@ class ToJsonExample
     use \Fnp\Dto\Common\Traits\DtoToJson;
 
     public    $one   = 'one';
-    protected $two   = 'two';
-    private   $three = 'three';
     public    $four;
     public    $five;
     public    $six;
     public    $seven;
+    protected $two   = 'two';
+    private   $three = 'three';
 }
 
 class ToJsonObjSerialExample

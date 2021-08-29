@@ -1,6 +1,6 @@
 <?php
 
-namespace Fnp\Dto\Exception;
+namespace Fnp\Dto\Exceptions;
 
 class DtoException extends \Exception
 {
