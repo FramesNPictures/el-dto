@@ -3,7 +3,7 @@
 use Fnp\Dto\Dto;
 use PHPUnit\Framework\TestCase;
 
-class DtoModelFillTest extends TestCase
+class DtoFillTest extends TestCase
 {
     /**
      * @return array[]
@@ -46,6 +46,11 @@ class DtoModelFillTest extends TestCase
                 return 'PriFill '.$value;
             }
 
+            public function fillTst($value)
+            {
+                return $value;
+            }
+
             public function toArray()
             {
                 return [
@@ -58,13 +63,19 @@ class DtoModelFillTest extends TestCase
 
         return [
 
-            // Basic
+            /*
+             * Basic Fill (Array)
+             * ----------
+             * Whenever property name and array key matches
+             * value should be assigned
+             */
             'Array All' => [
                 clone $basicModel,
                 [
                     'pub' => 'Public Property',
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
+                    'pru' => 'Should not be assigned',
                 ],
                 Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
                 [
@@ -79,6 +90,7 @@ class DtoModelFillTest extends TestCase
                     'pub' => 'Public Property',
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
+                    'prg' => 'Should not be assigned'
                 ],
                 Dto::PROTECTED,
                 [
@@ -116,13 +128,20 @@ class DtoModelFillTest extends TestCase
                 ],
             ],
 
-            // Fill
+            /* Advanced Fill (Array)
+             * -------------
+             * If property name and key matches and
+             * fill method exists result of fill method execution
+             * should be filled to property.
+             */
+
             'Fill Array All' => [
                 clone $fillModel,
                 [
                     'pub' => 'Public Property',
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
+                    'tst' => 'Should not be filled',
                 ],
                 Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
                 [
