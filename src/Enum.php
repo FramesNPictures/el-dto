@@ -1,14 +1,11 @@
 <?php
 
-namespace Fnp\Dto\Set;
+namespace Fnp\Dto;
 
-use Fnp\Dto\Common\Traits\DtoConstants;
 use Fnp\ElHelper\Obj;
 
-class SetModel
+class Enum
 {
-    use DtoConstants;
-
     protected $_handle;
 
     public static function make($handle)
@@ -105,8 +102,21 @@ class SetModel
         return $this->_handle == $handle;
     }
 
-    public function handle()
+    public function __toString(): string
     {
         return $this->_handle;
+    }
+
+    protected static function constants()
+    {
+        try {
+            $reflection = new \ReflectionClass(get_called_class());
+        } catch (\ReflectionException $e) {
+            return [];
+        }
+
+        $constants = $reflection->getConstants();
+
+        return $constants;
     }
 }

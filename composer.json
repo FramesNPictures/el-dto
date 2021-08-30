@@ -11,8 +11,8 @@
   "prefer-stable": true,
   "require": {
     "ext-json": "*",
-    "php": "^7.3|^8.0",
-    "framesnpictures/el-helper": "^0.1"
+    "php": "^8.0",
+    "framesnpictures/el-helper": "^0"
   },
   "autoload": {
     "psr-4": {
