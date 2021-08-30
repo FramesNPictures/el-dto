@@ -27,7 +27,7 @@ class DtoFillTest extends TestCase
         };
 
         $fillModel = new class() {
-            public    $pub = null;
+            public    $pub = 'pub';
             protected $pro = null;
             private   $pri = null;
 
@@ -159,7 +159,7 @@ class DtoFillTest extends TestCase
                 ],
                 Dto::PROTECTED,
                 [
-                    'pub' => null,
+                    'pub' => 'pub',
                     'pro' => 'ProFill Protected Property',
                     'pri' => null,
                 ],
@@ -173,7 +173,7 @@ class DtoFillTest extends TestCase
                 ],
                 Dto::PRIVATE,
                 [
-                    'pub' => null,
+                    'pub' => 'pub',
                     'pro' => null,
                     'pri' => 'PriFill Private Property',
                 ],
@@ -188,6 +188,34 @@ class DtoFillTest extends TestCase
                 Dto::PUBLIC,
                 [
                     'pub' => 'PubFill Public Property',
+                    'pro' => null,
+                    'pri' => null,
+                ],
+            ],
+
+            /*
+             * Include & Exclude Nulls
+             */
+            'Fill Including Nulls' => [
+                clone $fillModel,
+                [
+                    'pub' => null,
+                ],
+                Dto::PUBLIC,
+                [
+                    'pub' => 'PubFill ',
+                    'pro' => null,
+                    'pri' => null,
+                ],
+            ],
+            'Fill Excluding Nulls' => [
+                clone $fillModel,
+                [
+                    'pub' => null,
+                ],
+                Dto::PUBLIC + Dto::EXCLUDE_NULLS,
+                [
+                    'pub' => 'pub',
                     'pro' => null,
                     'pri' => null,
                 ],
