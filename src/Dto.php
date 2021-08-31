@@ -256,7 +256,7 @@ class Dto
      * @return string
      * @throws DtoCouldNotAccessProperties
      */
-    public static function toJson(object $model, int $flags): string
+    public static function toJson(object $model, int $flags = self::PUBLIC + self::PROTECTED): string
     {
         $array     = self::toArray($model, $flags);
         $jsonFlags = null;
@@ -268,11 +268,22 @@ class Dto
         return json_encode($array, $jsonFlags);
     }
 
-    public static function serialize(object $model, int $flags = self::PUBLIC + self::PROTECTED): string
+    /**
+     * @param  object  $model
+     * @param  int     $flags
+     *
+     * @return string
+     */
+    public static function serialize(object $model, int $flags = self::PUBLIC + self::PROTECTED + self::PRIVATE): string
     {
         return ''; // TODO: To be implemented
     }
 
+    /**
+     * @param  string  $model
+     *
+     * @return object
+     */
     public static function deserialize(string $model): object
     {
         return new static; // TODO: To be implemented
