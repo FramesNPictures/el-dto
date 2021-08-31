@@ -14,17 +14,20 @@ use ReflectionProperty;
 
 class Dto
 {
-    const PUBLIC                  = 0b000000000001;                // Fill only public properties
-    const PROTECTED               = 0b000000000010;                // Fill only protected properties
-    const PRIVATE                 = 0b000000000100;                // Fill only private properties
-    const EXCLUDE_NULLS           = 0b000000001000;                // Exclude values with NULL
-    const DONT_SERIALIZE_OBJECTS  = 0b000000010000;                // Do Not Serialize objects
-    const DONT_SERIALIZE_STRINGS  = 0b000000100000;                // Serialize objects with __toString
-    const PREFER_STRING_PROVIDERS = 0b000001000000;                // Prefer String Providers over Object Serialization
-    const JSON_PRETTY             = 0b000010000000;                // Produce nicely formated JSON
+    public const PUBLIC                  = 0b000000000001;                // Fill only public properties
+    public const PROTECTED               = 0b000000000010;                // Fill only protected properties
+    public const PRIVATE                 = 0b000000000100;                // Fill only private properties
+    public const EXCLUDE_NULLS           = 0b000000001000;                // Exclude values with NULL
+    public const DONT_SERIALIZE_OBJECTS  = 0b000000010000;                // Do Not Serialize objects
+    public const DONT_SERIALIZE_STRINGS  = 0b000000100000;                // Serialize objects with __toString
+    public const PREFER_STRING_PROVIDERS = 0b000001000000;                // Prefer String Providers over Object Serialization
+    public const JSON_PRETTY             = 0b000010000000;                // Produce nicely formatted JSON
 
-    public static function collection($modelClass, mixed $collection, int $flags): Collection
-    {
+    public static function collection(
+        $modelClass,
+        mixed $collection,
+        int $flags = self::PUBLIC + self::PROTECTED + self::PRIVATE
+    ): Collection {
         if (!$collection) {
             $collection = [];
         }
@@ -267,11 +270,11 @@ class Dto
 
     public static function serialize(object $model, int $flags = self::PUBLIC + self::PROTECTED): string
     {
-
+        return ''; // TODO: To be implemented
     }
 
     public static function deserialize(string $model): object
     {
-
+        return new static; // TODO: To be implemented
     }
 }
