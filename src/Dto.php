@@ -14,19 +14,22 @@ use ReflectionProperty;
 
 class Dto
 {
-    public const PUBLIC                  = 0b000000000001;                // Fill only public properties
-    public const PROTECTED               = 0b000000000010;                // Fill only protected properties
-    public const PRIVATE                 = 0b000000000100;                // Fill only private properties
-    public const EXCLUDE_NULLS           = 0b000000001000;                // Exclude values with NULL
-    public const DONT_SERIALIZE_OBJECTS  = 0b000000010000;                // Do Not Serialize objects
-    public const DONT_SERIALIZE_STRINGS  = 0b000000100000;                // Serialize objects with __toString
-    public const PREFER_STRING_PROVIDERS = 0b000001000000;                // Prefer String Providers over Object Serialization
-    public const JSON_PRETTY             = 0b000010000000;                // Produce nicely formatted JSON
+    public const INCLUDE_PUBLIC          = 0b0000000000001;                // Include public properties
+    public const EXCLUDE_PUBLIC          = 0b0000000000010;                // Exclude public properties
+    public const INCLUDE_PROTECTED       = 0b0000000000100;                // Include protected properties
+    public const EXCLUDE_PROTECTED       = 000000000001000;                // Exclude protected properties
+    public const INCLUDE_PRIVATE         = 0b0000000010000;                // Include private properties
+    public const EXCLUDE_PRIVATE         = 0b0000000100000;                // Exclude private properties
+    public const EXCLUDE_NULLS           = 0b0000001000000;                // Exclude values with NULL
+    public const DONT_SERIALIZE_OBJECTS  = 0b0000010000000;                // Do Not Serialize objects
+    public const DONT_SERIALIZE_STRINGS  = 0b0000100000000;                // Serialize objects with __toString
+    public const PREFER_STRING_PROVIDERS = 0b0001000000000;                // Prefer String Providers over Object Serialization
+    public const JSON_PRETTY             = 0b0010000000000;                // Produce nicely formatted JSON
 
     public static function collection(
         $modelClass,
         mixed $collection,
-        int $flags = self::PUBLIC + self::PROTECTED + self::PRIVATE
+        int $flags = 0
     ): Collection {
         if (!$collection) {
             $collection = [];
@@ -63,7 +66,7 @@ class Dto
     public static function fill(
         object $model,
         mixed $attributes,
-        int $flags = self::PRIVATE + self::PROTECTED + self::PUBLIC
+        int $flags = 0
     ): object {
 
         if (is_null($attributes)) {
@@ -82,9 +85,8 @@ class Dto
 
         $vars = self::properties(
             $model,
-            (Flg::has($flags, self::PRIVATE) ? ReflectionProperty::IS_PRIVATE : 0) +
-            (Flg::has($flags, self::PROTECTED) ? ReflectionProperty::IS_PROTECTED : 0) +
-            (Flg::has($flags, self::PUBLIC) ? ReflectionProperty::IS_PUBLIC : 0)
+            self::INCLUDE_PUBLIC + self::INCLUDE_PROTECTED + self::INCLUDE_PRIVATE,
+            $flags
         );
 
         foreach ($vars as $variable) {
@@ -114,19 +116,22 @@ class Dto
     }
 
     /**
-     * @param  object  $model
-     * @param  int     $filter
+     * @param  object  $model    Model object
+     * @param  int     $default  Default set of property flags (INCLUDE_, EXCLUDE_)
+     * @param  int     $flags    Override flags
      *
      * @return ReflectionProperty[]
      * @throws DtoCouldNotAccessProperties
      */
-    public static function properties(object $model, int $filter): array
+    public static function properties(object $model, int $default, int $flags): array
     {
         try {
             $reflection = new ReflectionClass($model);
         } catch (\ReflectionException $e) {
             throw DtoCouldNotAccessProperties::make($model);
         }
+
+        $filter = self::reflectionFilter($default, $flags);
 
         return $reflection->getProperties($filter);
     }
@@ -144,7 +149,7 @@ class Dto
         object $from,
         object $to,
         object $definition,
-        int $flags = self::PUBLIC + self::PROTECTED + self::PRIVATE
+        int $flags = 0
     ): object {
         $attributes = [];
 
@@ -186,11 +191,14 @@ class Dto
      * @return array
      * @throws DtoCouldNotAccessProperties
      */
-    public static function toArray(object $model, int $flags = self::PUBLIC + self::PROTECTED): array
+    public static function toArray(object $model, int $flags = 0): array
     {
         $array = [];
 
-        if (Iof::arrayable($model)) {
+        if (Iof::collection($model)) {
+            $model = $model->map(fn($m) => self::toArray($m, $flags));
+            return $model->toArray();
+        } elseif (Iof::arrayable($model)) {
             $array = $model->toArray();
         } elseif (Iof::serializable($model)) {
             $array = $model->__serialize();
@@ -198,9 +206,8 @@ class Dto
 
             $vars = self::properties(
                 $model,
-                (Flg::has($flags, self::PRIVATE) ? ReflectionProperty::IS_PRIVATE : 0) +
-                (Flg::has($flags, self::PROTECTED) ? ReflectionProperty::IS_PROTECTED : 0) +
-                (Flg::has($flags, self::PUBLIC) ? ReflectionProperty::IS_PUBLIC : 0)
+                self::INCLUDE_PUBLIC + self::INCLUDE_PROTECTED,
+                $flags
             );
 
             /** @var ReflectionProperty $varRef */
@@ -217,17 +224,29 @@ class Dto
                     !Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
                     Flg::has($flags, self::PREFER_STRING_PROVIDERS)
                 ) {
+                    // Use magic __toString to serialize string provider
                     $array[$varName] = $varValue->__toString();
                 } elseif (
                     Iof::arrayable($varValue) &&
                     !Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
                 ) {
+                    // Use explicit toArray method to serialize
                     $array[$varName] = $varValue->toArray();
                 } elseif (
                     Iof::serializable($varValue) &&
                     !Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
                 ) {
+                    // Use magick __serialize method to serialize object
                     $array[$varName] = $varValue->__serialize();
+                } elseif (
+                    is_object($varValue) &&
+                    !Iof::stringable($varValue) &&
+                    !Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
+                    !Flg::has($flags, self::PREFER_STRING_PROVIDERS) &&
+                    !Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
+                ) {
+                    // Apply toArray to the object
+                    $array[$varName] = self::toArray($varValue, $flags);
                 } elseif (
                     Iof::stringable($varValue) &&
                     !Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
@@ -256,10 +275,10 @@ class Dto
      * @return string
      * @throws DtoCouldNotAccessProperties
      */
-    public static function toJson(object $model, int $flags = self::PUBLIC + self::PROTECTED): string
+    public static function toJson(object $model, int $flags = 0): string
     {
         $array     = self::toArray($model, $flags);
-        $jsonFlags = null;
+        $jsonFlags = 0;
 
         if (Flg::has($flags, self::JSON_PRETTY)) {
             $jsonFlags = JSON_PRETTY_PRINT;
@@ -274,7 +293,7 @@ class Dto
      *
      * @return string
      */
-    public static function serialize(object $model, int $flags = self::PUBLIC + self::PROTECTED + self::PRIVATE): string
+    public static function serialize(object $model, int $flags = 0): string
     {
         return ''; // TODO: To be implemented
     }
@@ -287,5 +306,45 @@ class Dto
     public static function deserialize(string $model): object
     {
         return new static; // TODO: To be implemented
+    }
+
+    /**
+     * @param  int  $default
+     * @param  int  $flags
+     *
+     * @return int
+     */
+    protected static function reflectionFilter(int $default, int $flags): int
+    {
+        $filter = 0;
+
+        $logic = [
+            0 => [
+                self::EXCLUDE_PUBLIC => ReflectionProperty::IS_PUBLIC,
+                self::EXCLUDE_PROTECTED => ReflectionProperty::IS_PROTECTED,
+                self::EXCLUDE_PRIVATE => ReflectionProperty::IS_PRIVATE,
+            ],
+            1 => [
+                self::INCLUDE_PUBLIC => ReflectionProperty::IS_PUBLIC,
+                self::INCLUDE_PROTECTED => ReflectionProperty::IS_PROTECTED,
+                self::INCLUDE_PRIVATE => ReflectionProperty::IS_PRIVATE,
+            ],
+        ];
+
+        foreach ([$default, $flags] as $flagSet) {
+            foreach ($logic as $operation => $map) {
+                foreach ($map as $index => $propertyFilterFlag) {
+                    if (Flg::has($flagSet, $index)) {
+                        if ($operation) {
+                            $filter = Flg::set($filter, $propertyFilterFlag);
+                        } else {
+                            $filter = Flg::clear($filter, $propertyFilterFlag);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $filter;
     }
 }

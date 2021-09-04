@@ -77,7 +77,7 @@ class DtoFillTest extends TestCase
                     'pri' => 'Private Property',
                     'pru' => 'Should not be assigned',
                 ],
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED + Dto::INCLUDE_PRIVATE,
                 [
                     'pub' => 'Public Property',
                     'pro' => 'Protected Property',
@@ -92,7 +92,7 @@ class DtoFillTest extends TestCase
                     'pri' => 'Private Property',
                     'prg' => 'Should not be assigned'
                 ],
-                Dto::PROTECTED,
+                Dto::INCLUDE_PROTECTED + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PRIVATE,
                 [
                     'pub' => null,
                     'pro' => 'Protected Property',
@@ -106,7 +106,7 @@ class DtoFillTest extends TestCase
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::PRIVATE,
+                Dto::INCLUDE_PRIVATE + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED,
                 [
                     'pub' => null,
                     'pro' => null,
@@ -120,7 +120,7 @@ class DtoFillTest extends TestCase
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::PUBLIC,
+                Dto::INCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'Public Property',
                     'pro' => null,
@@ -143,7 +143,7 @@ class DtoFillTest extends TestCase
                     'pri' => 'Private Property',
                     'tst' => 'Should not be filled',
                 ],
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                0, // Default behaviour
                 [
                     'pub' => 'PubFill Public Property',
                     'pro' => 'ProFill Protected Property',
@@ -157,7 +157,7 @@ class DtoFillTest extends TestCase
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::PROTECTED,
+                Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'pub',
                     'pro' => 'ProFill Protected Property',
@@ -171,7 +171,7 @@ class DtoFillTest extends TestCase
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::PRIVATE,
+                Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED,
                 [
                     'pub' => 'pub',
                     'pro' => null,
@@ -185,7 +185,7 @@ class DtoFillTest extends TestCase
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::PUBLIC,
+                Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'PubFill Public Property',
                     'pro' => null,
@@ -201,7 +201,7 @@ class DtoFillTest extends TestCase
                 [
                     'pub' => null,
                 ],
-                Dto::PUBLIC,
+                Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'PubFill ',
                     'pro' => null,
@@ -213,7 +213,7 @@ class DtoFillTest extends TestCase
                 [
                     'pub' => null,
                 ],
-                Dto::PUBLIC + Dto::EXCLUDE_NULLS,
+                Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE + Dto::EXCLUDE_NULLS,
                 [
                     'pub' => 'pub',
                     'pro' => null,

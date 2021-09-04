@@ -447,16 +447,16 @@
         },
         {
             "name": "framesnpictures/el-helper",
-            "version": "v0.4",
+            "version": "v0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FramesNPictures/el-helper.git",
-                "reference": "b3e443d54e30a654f154d0de4eee29de8b92bc6d"
+                "reference": "f1e98d35b39db21b54ee63a3bdda7cac80d94e81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FramesNPictures/el-helper/zipball/b3e443d54e30a654f154d0de4eee29de8b92bc6d",
-                "reference": "b3e443d54e30a654f154d0de4eee29de8b92bc6d",
+                "url": "https://api.github.com/repos/FramesNPictures/el-helper/zipball/f1e98d35b39db21b54ee63a3bdda7cac80d94e81",
+                "reference": "f1e98d35b39db21b54ee63a3bdda7cac80d94e81",
                 "shasum": ""
             },
             "require": {
@@ -485,9 +485,9 @@
             "description": "Re-usable Helper Objects",
             "support": {
                 "issues": "https://github.com/FramesNPictures/el-helper/issues",
-                "source": "https://github.com/FramesNPictures/el-helper/tree/v0.4"
+                "source": "https://github.com/FramesNPictures/el-helper/tree/v0.5"
             },
-            "time": "2021-08-30T15:15:59+00:00"
+            "time": "2021-09-04T15:21:44+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -552,16 +552,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.57.0",
+            "version": "v8.58.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6de01746680d7bc7e239b20ec5cdfe70ce586235"
+                "reference": "1b819bf99d87bd543a4d4895e5b3350f61ea7a23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6de01746680d7bc7e239b20ec5cdfe70ce586235",
-                "reference": "6de01746680d7bc7e239b20ec5cdfe70ce586235",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/1b819bf99d87bd543a4d4895e5b3350f61ea7a23",
+                "reference": "1b819bf99d87bd543a4d4895e5b3350f61ea7a23",
                 "shasum": ""
             },
             "require": {
@@ -716,7 +716,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-08-27T13:34:11+00:00"
+            "time": "2021-08-31T13:55:57+00:00"
         },
         {
             "name": "league/commonmark",
@@ -5763,16 +5763,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.8",
+            "version": "9.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "191768ccd5c85513b4068bdbe99bb6390c7d54fb"
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/191768ccd5c85513b4068bdbe99bb6390c7d54fb",
-                "reference": "191768ccd5c85513b4068bdbe99bb6390c7d54fb",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
                 "shasum": ""
             },
             "require": {
@@ -5850,7 +5850,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.8"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.9"
             },
             "funding": [
                 {
@@ -5862,7 +5862,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-31T15:17:34+00:00"
+            "time": "2021-08-31T06:47:40+00:00"
         },
         {
             "name": "psr/http-factory",
@@ -6869,6 +6869,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-09-28T06:45:17+00:00"
         },
         {

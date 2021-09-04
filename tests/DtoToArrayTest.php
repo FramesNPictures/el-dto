@@ -1,6 +1,7 @@
 <?php
 
 use Fnp\Dto\Dto;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestCase;
 
 class DtoToArrayTest extends TestCase
@@ -60,7 +61,7 @@ class DtoToArrayTest extends TestCase
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED + Dto::INCLUDE_PRIVATE,
                 [
                     'pub' => 'Public',
                     'pro' => 'Protected',
@@ -74,7 +75,7 @@ class DtoToArrayTest extends TestCase
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::PUBLIC,
+                Dto::INCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'Public',
                 ],
@@ -86,7 +87,7 @@ class DtoToArrayTest extends TestCase
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::PROTECTED,
+                Dto::INCLUDE_PROTECTED + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PRIVATE,
                 [
                     'pro' => 'Protected',
                 ],
@@ -98,7 +99,7 @@ class DtoToArrayTest extends TestCase
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::PRIVATE,
+                Dto::INCLUDE_PRIVATE + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED,
                 [
                     'pri' => 'Private',
                 ],
@@ -110,7 +111,7 @@ class DtoToArrayTest extends TestCase
                     'b' => null,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC,
+                0,
                 [
                     'a' => 'A',
                     'b' => null,
@@ -124,7 +125,7 @@ class DtoToArrayTest extends TestCase
                     'b' => null,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC + Dto::EXCLUDE_NULLS,
+                Dto::EXCLUDE_NULLS,
                 [
                     'a' => 'A',
                     'c' => 'C',
@@ -137,7 +138,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classArrayable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC,
+                0,
                 [
                     'a' => 'A',
                     'b' => ['c' => 'C', 'd' => 'D'],
@@ -151,7 +152,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classArrayable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC + Dto::DONT_SERIALIZE_OBJECTS,
+                Dto::DONT_SERIALIZE_OBJECTS,
                 [
                     'a' => 'A',
                     'b' => $classArrayable,
@@ -165,7 +166,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classSerializable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC,
+                0,
                 [
                     'a' => 'A',
                     'b' => ['c' => 'C', 'd' => 'D'],
@@ -179,7 +180,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classSerializable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC + Dto::DONT_SERIALIZE_OBJECTS,
+                Dto::DONT_SERIALIZE_OBJECTS,
                 [
                     'a' => 'A',
                     'b' => $classSerializable,
@@ -193,7 +194,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classStringable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC,
+                0,
                 [
                     'a' => 'A',
                     'b' => 'STRING',
@@ -207,7 +208,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classStringable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC + Dto::DONT_SERIALIZE_STRINGS,
+                Dto::DONT_SERIALIZE_STRINGS,
                 [
                     'a' => 'A',
                     'b' => $classStringable,
@@ -221,7 +222,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classStringableAndSerializable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC + Dto::PREFER_STRING_PROVIDERS,
+                Dto::PREFER_STRING_PROVIDERS,
                 [
                     'a' => 'A',
                     'b' => 'STRING',
@@ -235,7 +236,7 @@ class DtoToArrayTest extends TestCase
                     'b' => $classStringableAndSerializable,
                     'c' => 'C',
                 ],
-                Dto::PUBLIC,
+                0,
                 [
                     'a' => 'A',
                     'b' => ['c' => 'C', 'd' => 'D'],
@@ -245,7 +246,7 @@ class DtoToArrayTest extends TestCase
             'From toArray()' => [
                 clone $classArrayable,
                 [],
-                Dto::PUBLIC,
+                Dto::INCLUDE_PUBLIC,
                 [
                     'c'=>'C',
                     'd'=>'D',
@@ -254,7 +255,7 @@ class DtoToArrayTest extends TestCase
             'From __serialize()' => [
                 clone $classSerializable,
                 [],
-                Dto::PUBLIC,
+                Dto::INCLUDE_PUBLIC,
                 [
                     'c'=>'C',
                     'd'=>'D',
@@ -278,5 +279,68 @@ class DtoToArrayTest extends TestCase
     {
         Dto::fill($model, $data);
         $this->assertEquals($result, Dto::toArray($model, $flags));
+    }
+
+    public function testDtoToArrayCollection()
+    {
+        $data = [
+            new class {
+                public $a = 'A';
+                public $b = 'B';
+                public $c = 'C';
+            },
+            new class {
+                public $a = 1;
+                public $b = 2;
+                public $c = 3;
+            },
+            new class {
+                public $a = 'A';
+                public $b = 'B';
+                public $c = 'C';
+            },
+        ];
+
+        $collection = new Collection($data);
+        $this->assertEquals(
+            [
+                ['a' => 'A', 'b' => 'B', 'c' => 'C'],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => 'A', 'b' => 'B', 'c' => 'C'],
+            ],
+            Dto::toArray($collection)
+        );
+    }
+
+    public function testDtoToArrayCollectionDeepSerialization()
+    {
+        $secondLevel = new class {
+            public $x = 'X';
+            public $y = 'Y';
+            public $z = 'Z';
+        };
+        $data        = [
+            new class {
+                public $a = 'A';
+                public $b = 'B';
+                public $c = 'C';
+            },
+            new class {
+                public $a = 1;
+                public $b = 2;
+                public $c = 3;
+            },
+        ];
+        $data[0]->c  = clone $secondLevel;
+        $data[1]->c  = clone $secondLevel;
+
+        $collection = new Collection($data);
+        $this->assertEquals(
+            [
+                ['a' => 'A', 'b' => 'B', 'c' => ['x' => 'X', 'y' => 'Y', 'z' => 'Z']],
+                ['a' => 1, 'b' => 2, 'c' => ['x' => 'X', 'y' => 'Y', 'z' => 'Z']],
+            ],
+            Dto::toArray($collection)
+        );
     }
 }

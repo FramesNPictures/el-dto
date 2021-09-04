@@ -34,7 +34,7 @@ class DtoMapTest extends TestCase
                     public $y = 'b';
                     public $z = 'c';
                 },
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                Dto::INCLUDE_PRIVATE,
                 [
                     'x' => 'A',
                     'y' => 'B',
@@ -49,7 +49,7 @@ class DtoMapTest extends TestCase
                     public $y = 'd.d2';
                     public $z = 'd.d3';
                 },
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                0,
                 [
                     'x' => 'One',
                     'y' => 'Two',
@@ -64,7 +64,7 @@ class DtoMapTest extends TestCase
                     public $y = ['x', 'b'];
                     public $z = ['x', 'y', 'c'];
                 },
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                Dto::INCLUDE_PRIVATE,
                 [
                     'x' => 'C',
                     'y' => 'B',
@@ -79,7 +79,7 @@ class DtoMapTest extends TestCase
                     public $y = ['x', 'd.d3'];
                     public $z = ['x', 'y', 'c'];
                 },
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                Dto::INCLUDE_PRIVATE,
                 [
                     'x' => ['d1' => 'One', 'd2' => 'Two', 'd3' => 'Three'],
                     'y' => 'Three',
@@ -94,7 +94,7 @@ class DtoMapTest extends TestCase
                     public $y = 'e';
                     public $z = 'a';
                 },
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE,
+                0,
                 [
                     'x' => 'A',
                     'y' => null, // Default value should be overwritten by null
@@ -109,7 +109,7 @@ class DtoMapTest extends TestCase
                     public $y = 'e';
                     public $z = 'a';
                 },
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE + Dto::EXCLUDE_NULLS,
+                Dto::EXCLUDE_NULLS,
                 [
                     'x' => 'A',
                     'y' => 'Y', // Excluding nulls so default Y value should be seen
@@ -135,10 +135,7 @@ class DtoMapTest extends TestCase
         Dto::map($from, $to, $definition, $flags);
         $this->assertEquals(
             $result,
-            Dto::toArray(
-                $to,
-                Dto::PUBLIC + Dto::PROTECTED + Dto::PRIVATE
-            )
+            Dto::toArray($to, Dto::INCLUDE_PRIVATE + Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED)
         );
     }
 }
