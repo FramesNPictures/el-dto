@@ -83,7 +83,7 @@ class Enum
 
         foreach ($variables as $variable) {
             $varName = $variable->getName();
-            $method  = Obj::methodName('get', $varName);
+            $method  = Obj::methodName('init', $varName);
 
             if (!method_exists($this, $method))
                 continue;
