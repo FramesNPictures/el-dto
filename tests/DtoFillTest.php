@@ -3,7 +3,7 @@
 use Fnp\Dto\Dto;
 use PHPUnit\Framework\TestCase;
 
-class DtoFillTest extends TestCase
+class DtoFillTest
 {
     /**
      * @return array[]

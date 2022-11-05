@@ -3,7 +3,7 @@
 use Fnp\Dto\Dto;
 use PHPUnit\Framework\TestCase;
 
-class DtoMapTest extends TestCase
+class DtoMapTest
 {
     public function provideTestData()
     {

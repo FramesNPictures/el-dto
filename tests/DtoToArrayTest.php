@@ -4,7 +4,7 @@ use Fnp\Dto\Dto;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestCase;
 
-class DtoToArrayTest extends TestCase
+class DtoToArrayTest
 {
     public function provideTestData()
     {

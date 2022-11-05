@@ -2,6 +2,9 @@
 
 namespace Fnp\Dto;
 
+use Fnp\Dto\Contracts\AccessesModel;
+use Fnp\Dto\Contracts\ModifiesValue;
+use Fnp\Dto\Contracts\ObtainsValue;
 use Fnp\Dto\Exceptions\DtoClassNotExistsException;
 use Fnp\Dto\Exceptions\DtoCouldNotAccessProperties;
 use Fnp\ElHelper\Arr;
@@ -31,24 +34,25 @@ class Dto
         mixed $collection,
         int $flags = 0
     ): Collection {
-        if (!$collection) {
+        if ( ! $collection) {
             $collection = [];
         }
 
-        if (!$modelClass || !class_exists($modelClass, true)) {
+        if ( ! $modelClass || ! class_exists($modelClass, true)) {
             throw DtoClassNotExistsException::make($modelClass);
         }
 
-        if (Iof::arrayable($collection) && !Iof::collection($collection)) {
+        if (Iof::arrayable($collection) && ! Iof::collection($collection)) {
             $collection = $collection->toArray($flags);
         }
 
-        if (!Iof::collection($collection)) {
+        if ( ! Iof::collection($collection)) {
             $collection = new Collection($collection);
         }
 
         $collection = $collection->map(function ($item) use ($modelClass, $flags) {
             $model = app($modelClass);
+
             return self::fill($model, $item, $flags);
         });
 
@@ -57,7 +61,7 @@ class Dto
 
     /**
      * @param  object  $model
-     * @param  mixed   $attributes
+     * @param  mixed   $data
      * @param  int     $flags
      *
      * @return object
@@ -65,22 +69,22 @@ class Dto
      */
     public static function fill(
         object $model,
-        mixed $attributes,
+        mixed $data,
         int $flags = 0
     ): object {
 
-        if (is_null($attributes)) {
+        if (is_null($data)) {
             return $model;
         }
 
-        if (!Arr::accessible($attributes) &&
-            Iof::arrayable($attributes) &&
-            !Iof::eloquentModel($attributes)) {
-            $attributes = $attributes->toArray();
+        if ( ! Arr::accessible($data) &&
+             Iof::arrayable($data) &&
+             ! Iof::eloquentModel($data)) {
+            $data = $data->toArray();
         }
 
-        if ($attributes instanceof \stdClass) {
-            $attributes = get_object_vars($attributes);
+        if ($data instanceof \stdClass) {
+            $data = get_object_vars($data);
         }
 
         $vars = self::properties(
@@ -92,24 +96,25 @@ class Dto
         foreach ($vars as $variable) {
             $variable->setAccessible(true);
             $varName  = $variable->getName();
-            $varValue = Arr::get($attributes, $varName, '!**NOTFOUND**__');
+            $varValue = null;
 
-            if ($varValue === '!**NOTFOUND**__') {
-                continue;
+            foreach($variable->getAttributes() as $attrReflection) {
+                $attribute = $attrReflection->newInstance();
+
+                if ($attribute instanceof AccessesModel) {
+                    $attribute->setModel($model);
+                }
+
+                if ($attribute instanceof ObtainsValue) {
+                    $varValue = $attribute->getValue($data);
+                }
+
+                if ($attribute instanceof ModifiesValue) {
+                    $varValue = $attribute->modifyValue($varValue);
+                }
             }
 
-            if (is_null($varValue) && Flg::has($flags, self::EXCLUDE_NULLS)) {
-                continue;
-            }
-
-            $filler = Obj::methodExists($model, 'fill', $varName);
-
-            if ($filler) {
-                $varValue = $model->$filler($varValue);
-                $variable->setValue($model, $varValue);
-            } else {
-                $variable->setValue($model, $varValue);
-            }
+            $variable->setValue($model, $varValue);
         }
 
         return $model;
@@ -197,6 +202,7 @@ class Dto
 
         if (Iof::collection($model)) {
             $model = $model->map(fn($m) => self::toArray($m, $flags));
+
             return $model->toArray();
         } elseif (Iof::arrayable($model)) {
             $array = $model->toArray();
@@ -221,36 +227,36 @@ class Dto
                     $array[$varName] = $model->$getter();
                 } elseif (
                     Iof::stringable($varValue) &&
-                    !Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
+                    ! Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
                     Flg::has($flags, self::PREFER_STRING_PROVIDERS)
                 ) {
                     // Use magic __toString to serialize string provider
                     $array[$varName] = $varValue->__toString();
                 } elseif (
                     Iof::arrayable($varValue) &&
-                    !Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
+                    ! Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
                 ) {
                     // Use explicit toArray method to serialize
                     $array[$varName] = $varValue->toArray();
                 } elseif (
                     Iof::serializable($varValue) &&
-                    !Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
+                    ! Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
                 ) {
                     // Use magick __serialize method to serialize object
                     $array[$varName] = $varValue->__serialize();
                 } elseif (
                     is_object($varValue) &&
-                    !Iof::stringable($varValue) &&
-                    !Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
-                    !Flg::has($flags, self::PREFER_STRING_PROVIDERS) &&
-                    !Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
+                    ! Iof::stringable($varValue) &&
+                    ! Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
+                    ! Flg::has($flags, self::PREFER_STRING_PROVIDERS) &&
+                    ! Flg::has($flags, self::DONT_SERIALIZE_OBJECTS)
                 ) {
                     // Apply toArray to the object
                     $array[$varName] = self::toArray($varValue, $flags);
                 } elseif (
                     Iof::stringable($varValue) &&
-                    !Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
-                    !Flg::has($flags, self::PREFER_STRING_PROVIDERS)
+                    ! Flg::has($flags, self::DONT_SERIALIZE_STRINGS) &&
+                    ! Flg::has($flags, self::PREFER_STRING_PROVIDERS)
                 ) {
                     $array[$varName] = $varValue->__toString();
                 } else {
@@ -261,7 +267,7 @@ class Dto
 
         if (Flg::has($flags, self::EXCLUDE_NULLS)) {
             $array = array_filter($array, function ($value) {
-                return !is_null($value);
+                return ! is_null($value);
             });
         }
 
@@ -320,14 +326,14 @@ class Dto
 
         $logic = [
             0 => [
-                self::EXCLUDE_PUBLIC => ReflectionProperty::IS_PUBLIC,
+                self::EXCLUDE_PUBLIC    => ReflectionProperty::IS_PUBLIC,
                 self::EXCLUDE_PROTECTED => ReflectionProperty::IS_PROTECTED,
-                self::EXCLUDE_PRIVATE => ReflectionProperty::IS_PRIVATE,
+                self::EXCLUDE_PRIVATE   => ReflectionProperty::IS_PRIVATE,
             ],
             1 => [
-                self::INCLUDE_PUBLIC => ReflectionProperty::IS_PUBLIC,
+                self::INCLUDE_PUBLIC    => ReflectionProperty::IS_PUBLIC,
                 self::INCLUDE_PROTECTED => ReflectionProperty::IS_PROTECTED,
-                self::INCLUDE_PRIVATE => ReflectionProperty::IS_PRIVATE,
+                self::INCLUDE_PRIVATE   => ReflectionProperty::IS_PRIVATE,
             ],
         ];
 
