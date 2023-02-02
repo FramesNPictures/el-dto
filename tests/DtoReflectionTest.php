@@ -1,6 +1,6 @@
 <?php
 
-use Fnp\Dto\Dto;
+use Fnp\Dto\DtoLegacy;
 use PHPUnit\Framework\TestCase;
 
 class DtoReflectionTest extends TestCase
@@ -9,13 +9,13 @@ class DtoReflectionTest extends TestCase
     {
         return [
             'Default toArray + Include Private' => [
-                Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
-                Dto::INCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PRIVATE,
                 ReflectionProperty::IS_PUBLIC + ReflectionProperty::IS_PROTECTED + ReflectionProperty::IS_PRIVATE,
             ],
             'Default toArray + Exclude Protected' => [
-                Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
-                Dto::EXCLUDE_PROTECTED,
+                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
+                DtoLegacy::EXCLUDE_PROTECTED,
                 ReflectionProperty::IS_PUBLIC,
             ]
         ];
@@ -32,7 +32,7 @@ class DtoReflectionTest extends TestCase
      */
     public function testReflectionFilter($default, $flags, $result)
     {
-        $r = new ReflectionClass(Dto::class);
+        $r = new ReflectionClass(DtoLegacy::class);
         $m = $r->getMethod('reflectionFilter');
         $m->setAccessible(true);
 

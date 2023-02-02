@@ -1,8 +1,7 @@
 <?php
 
-use Fnp\Dto\Dto;
+use Fnp\Dto\DtoLegacy;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\TestCase;
 
 class DtoToArrayTest
 {
@@ -61,7 +60,7 @@ class DtoToArrayTest
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED + Dto::INCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::INCLUDE_PRIVATE,
                 [
                     'pub' => 'Public',
                     'pro' => 'Protected',
@@ -75,7 +74,7 @@ class DtoToArrayTest
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::INCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'Public',
                 ],
@@ -87,7 +86,7 @@ class DtoToArrayTest
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::INCLUDE_PROTECTED + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PRIVATE,
                 [
                     'pro' => 'Protected',
                 ],
@@ -99,7 +98,7 @@ class DtoToArrayTest
                     'pro' => 'Protected',
                     'pri' => 'Private',
                 ],
-                Dto::INCLUDE_PRIVATE + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED,
+                DtoLegacy::INCLUDE_PRIVATE + DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED,
                 [
                     'pri' => 'Private',
                 ],
@@ -125,7 +124,7 @@ class DtoToArrayTest
                     'b' => null,
                     'c' => 'C',
                 ],
-                Dto::EXCLUDE_NULLS,
+                DtoLegacy::EXCLUDE_NULLS,
                 [
                     'a' => 'A',
                     'c' => 'C',
@@ -152,7 +151,7 @@ class DtoToArrayTest
                     'b' => $classArrayable,
                     'c' => 'C',
                 ],
-                Dto::DONT_SERIALIZE_OBJECTS,
+                DtoLegacy::DONT_SERIALIZE_OBJECTS,
                 [
                     'a' => 'A',
                     'b' => $classArrayable,
@@ -180,7 +179,7 @@ class DtoToArrayTest
                     'b' => $classSerializable,
                     'c' => 'C',
                 ],
-                Dto::DONT_SERIALIZE_OBJECTS,
+                DtoLegacy::DONT_SERIALIZE_OBJECTS,
                 [
                     'a' => 'A',
                     'b' => $classSerializable,
@@ -208,7 +207,7 @@ class DtoToArrayTest
                     'b' => $classStringable,
                     'c' => 'C',
                 ],
-                Dto::DONT_SERIALIZE_STRINGS,
+                DtoLegacy::DONT_SERIALIZE_STRINGS,
                 [
                     'a' => 'A',
                     'b' => $classStringable,
@@ -222,7 +221,7 @@ class DtoToArrayTest
                     'b' => $classStringableAndSerializable,
                     'c' => 'C',
                 ],
-                Dto::PREFER_STRING_PROVIDERS,
+                DtoLegacy::PREFER_STRING_PROVIDERS,
                 [
                     'a' => 'A',
                     'b' => 'STRING',
@@ -246,7 +245,7 @@ class DtoToArrayTest
             'From toArray()' => [
                 clone $classArrayable,
                 [],
-                Dto::INCLUDE_PUBLIC,
+                DtoLegacy::INCLUDE_PUBLIC,
                 [
                     'c'=>'C',
                     'd'=>'D',
@@ -255,7 +254,7 @@ class DtoToArrayTest
             'From __serialize()' => [
                 clone $classSerializable,
                 [],
-                Dto::INCLUDE_PUBLIC,
+                DtoLegacy::INCLUDE_PUBLIC,
                 [
                     'c'=>'C',
                     'd'=>'D',
@@ -273,12 +272,12 @@ class DtoToArrayTest
      * @param  int     $flags
      * @param  array   $result
      *
-     * @throws \Fnp\Dto\Exceptions\DtoCouldNotAccessProperties
+     * @throws \Fnp\ElHelper\Exceptions\CouldNotAccessProperties
      */
     public function testDtoToArray(object $model, array $data, int $flags, array $result)
     {
-        Dto::fill($model, $data);
-        $this->assertEquals($result, Dto::toArray($model, $flags));
+        DtoLegacy::fill($model, $data);
+        $this->assertEquals($result, DtoLegacy::toArray($model, $flags));
     }
 
     public function testDtoToArrayCollection()
@@ -308,7 +307,7 @@ class DtoToArrayTest
                 ['a' => 1, 'b' => 2, 'c' => 3],
                 ['a' => 'A', 'b' => 'B', 'c' => 'C'],
             ],
-            Dto::toArray($collection)
+            DtoLegacy::toArray($collection)
         );
     }
 
@@ -340,7 +339,7 @@ class DtoToArrayTest
                 ['a' => 'A', 'b' => 'B', 'c' => ['x' => 'X', 'y' => 'Y', 'z' => 'Z']],
                 ['a' => 1, 'b' => 2, 'c' => ['x' => 'X', 'y' => 'Y', 'z' => 'Z']],
             ],
-            Dto::toArray($collection)
+            DtoLegacy::toArray($collection)
         );
     }
 }

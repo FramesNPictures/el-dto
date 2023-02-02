@@ -1,9 +1,9 @@
 <?php
 
-use Fnp\Dto\Attributes\GrabValue;
-use Fnp\Dto\Attributes\UseModifier;
-use Fnp\Dto\Contracts\ModifiesValue;
-use Fnp\Dto\Dto;
+use Fnp\Dto\Attributes\DtoValue;
+use Fnp\Dto\Attributes\DtoModifier;
+use Fnp\Dto\Contracts\ModifiesDtoValue;
+use Fnp\Dto\DtoLegacy;
 use PHPUnit\Framework\TestCase;
 
 class DtoAttributesTest extends TestCase
@@ -11,7 +11,7 @@ class DtoAttributesTest extends TestCase
     public function testValueAttribute()
     {
         $obj = new AttrModelA;
-        $obj = Dto::fill(
+        $obj = DtoLegacy::fill(
             $obj,
             [
                 'aa' => 'aa',
@@ -21,30 +21,34 @@ class DtoAttributesTest extends TestCase
                     'one' => 'one',
                     'two' => 'two',
                 ],
+                'gg' => 'gg',
             ]);
-        dd(Dto::toArray($obj));
+        dd(DtoLegacy::toArray($obj));
     }
 }
 
 class AttrModelA
 {
-    #[GrabValue('aa')]
+    #[DtoValue('aa')]
     public string $a;
 
-    #[GrabValue('bb')]
+    #[DtoValue('bb')]
     public string $b;
 
-    #[GrabValue('cc')]
-    #[UseModifier('capitalize')]
+    #[DtoValue('cc')]
+    #[DtoModifier('capitalize')]
     public string $c;
 
-    #[GrabValue('dd', default: 'NoNe')]
-    #[UseModifier(new ModifierA())]
+    #[DtoValue('dd', default: 'NoNe')]
+    #[DtoModifier(new ModifierA())]
     public string $d;
 
-    #[GrabValue('ee.one', 'None')]
-    #[UseModifier('capitalize')]
+    #[DtoValue('ee.one', 'None')]
+    #[DtoModifier('capitalize')]
     public string $e;
+
+    #[DtoValue(['ff', 'gg'], 'None')]
+    public string $f;
 
     public function capitalize(string $value): string
     {
@@ -52,7 +56,7 @@ class AttrModelA
     }
 }
 
-class ModifierA implements ModifiesValue
+class ModifierA implements ModifiesDtoValue
 {
     public function modifyValue(mixed $value): mixed
     {

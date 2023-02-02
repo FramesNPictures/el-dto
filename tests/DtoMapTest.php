@@ -1,7 +1,6 @@
 <?php
 
-use Fnp\Dto\Dto;
-use PHPUnit\Framework\TestCase;
+use Fnp\Dto\DtoLegacy;
 
 class DtoMapTest
 {
@@ -34,7 +33,7 @@ class DtoMapTest
                     public $y = 'b';
                     public $z = 'c';
                 },
-                Dto::INCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PRIVATE,
                 [
                     'x' => 'A',
                     'y' => 'B',
@@ -64,7 +63,7 @@ class DtoMapTest
                     public $y = ['x', 'b'];
                     public $z = ['x', 'y', 'c'];
                 },
-                Dto::INCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PRIVATE,
                 [
                     'x' => 'C',
                     'y' => 'B',
@@ -79,7 +78,7 @@ class DtoMapTest
                     public $y = ['x', 'd.d3'];
                     public $z = ['x', 'y', 'c'];
                 },
-                Dto::INCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PRIVATE,
                 [
                     'x' => ['d1' => 'One', 'd2' => 'Two', 'd3' => 'Three'],
                     'y' => 'Three',
@@ -109,7 +108,7 @@ class DtoMapTest
                     public $y = 'e';
                     public $z = 'a';
                 },
-                Dto::EXCLUDE_NULLS,
+                DtoLegacy::EXCLUDE_NULLS,
                 [
                     'x' => 'A',
                     'y' => 'Y', // Excluding nulls so default Y value should be seen
@@ -128,14 +127,14 @@ class DtoMapTest
      * @param $flags
      * @param $result
      *
-     * @throws \Fnp\Dto\Exceptions\DtoCouldNotAccessProperties
+     * @throws \Fnp\ElHelper\Exceptions\CouldNotAccessProperties
      */
     public function testDtoMap($from, $to, $definition, $flags, $result)
     {
-        Dto::map($from, $to, $definition, $flags);
+        DtoLegacy::map($from, $to, $definition, $flags);
         $this->assertEquals(
             $result,
-            Dto::toArray($to, Dto::INCLUDE_PRIVATE + Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED)
+            DtoLegacy::toArray($to, DtoLegacy::INCLUDE_PRIVATE + DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::INCLUDE_PROTECTED)
         );
     }
 }

@@ -3,11 +3,11 @@
 namespace Fnp\Dto\Attributes;
 
 use Attribute;
-use Fnp\Dto\Contracts\AccessesModel;
-use Fnp\Dto\Contracts\ModifiesValue;
+use Fnp\Dto\Contracts\AccessesDtoModel;
+use Fnp\Dto\Contracts\ModifiesDtoValue;
 
 #[Attribute]
-class UseModifier implements ModifiesValue, AccessesModel
+class DtoModifier implements ModifiesDtoValue, AccessesDtoModel
 {
     protected mixed  $method;
     protected object $model;
@@ -28,11 +28,11 @@ class UseModifier implements ModifiesValue, AccessesModel
         $model  = $this->model;
         $method = $this->method;
 
-        if ($method instanceof AccessesModel) {
+        if ($method instanceof AccessesDtoModel) {
             $method->setModel($model);
         }
 
-        if ($method instanceof ModifiesValue) {
+        if ($method instanceof ModifiesDtoValue) {
             return $method->modifyValue($value);
         }
 

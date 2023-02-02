@@ -1,7 +1,6 @@
 <?php
 
-use Fnp\Dto\Dto;
-use PHPUnit\Framework\TestCase;
+use Fnp\Dto\DtoLegacy;
 
 class DtoFillTest
 {
@@ -77,7 +76,7 @@ class DtoFillTest
                     'pri' => 'Private Property',
                     'pru' => 'Should not be assigned',
                 ],
-                Dto::INCLUDE_PUBLIC + Dto::INCLUDE_PROTECTED + Dto::INCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::INCLUDE_PRIVATE,
                 [
                     'pub' => 'Public Property',
                     'pro' => 'Protected Property',
@@ -92,7 +91,7 @@ class DtoFillTest
                     'pri' => 'Private Property',
                     'prg' => 'Should not be assigned'
                 ],
-                Dto::INCLUDE_PROTECTED + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PRIVATE,
                 [
                     'pub' => null,
                     'pro' => 'Protected Property',
@@ -106,7 +105,7 @@ class DtoFillTest
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::INCLUDE_PRIVATE + Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED,
+                DtoLegacy::INCLUDE_PRIVATE + DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED,
                 [
                     'pub' => null,
                     'pro' => null,
@@ -120,7 +119,7 @@ class DtoFillTest
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::INCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
+                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'Public Property',
                     'pro' => null,
@@ -157,7 +156,7 @@ class DtoFillTest
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PRIVATE,
+                DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'pub',
                     'pro' => 'ProFill Protected Property',
@@ -171,7 +170,7 @@ class DtoFillTest
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::EXCLUDE_PUBLIC + Dto::EXCLUDE_PROTECTED,
+                DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED,
                 [
                     'pub' => 'pub',
                     'pro' => null,
@@ -185,7 +184,7 @@ class DtoFillTest
                     'pro' => 'Protected Property',
                     'pri' => 'Private Property',
                 ],
-                Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
+                DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'PubFill Public Property',
                     'pro' => null,
@@ -201,7 +200,7 @@ class DtoFillTest
                 [
                     'pub' => null,
                 ],
-                Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE,
+                DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
                 [
                     'pub' => 'PubFill ',
                     'pro' => null,
@@ -213,7 +212,7 @@ class DtoFillTest
                 [
                     'pub' => null,
                 ],
-                Dto::EXCLUDE_PROTECTED + Dto::EXCLUDE_PRIVATE + Dto::EXCLUDE_NULLS,
+                DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE + DtoLegacy::EXCLUDE_NULLS,
                 [
                     'pub' => 'pub',
                     'pro' => null,
@@ -231,11 +230,11 @@ class DtoFillTest
      * @param $flags
      * @param $result
      *
-     * @throws \Fnp\Dto\Exceptions\DtoCouldNotAccessProperties
+     * @throws \Fnp\ElHelper\Exceptions\CouldNotAccessProperties
      */
     public function testFillingModel($model, $data, $flags, $result)
     {
-        Dto::fill($model, $data, $flags);
+        DtoLegacy::fill($model, $data, $flags);
         $this->assertEquals($result, $model->toArray());
     }
 }

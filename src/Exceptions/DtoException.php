@@ -2,7 +2,7 @@
 
 namespace Fnp\Dto\Exceptions;
 
-class DtoException extends \Exception
+class DtoException extends \RuntimeException
 {
 
 }

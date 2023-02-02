@@ -2,7 +2,7 @@
 
 namespace Fnp\Dto\Contracts;
 
-interface AccessesModel
+interface AccessesDtoModel
 {
     /**
      * Sets the model for the usage in the attribute

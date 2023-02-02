@@ -2,7 +2,7 @@
 
 namespace Fnp\Dto\Contracts;
 
-interface ModifiesValue
+interface ModifiesDtoValue
 {
     /**
      * Modifies provided value, provides a conversion
