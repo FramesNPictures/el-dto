@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e8b5eb62b03ead5a2ad41e381de9e53",
+    "content-hash": "3ecfad2a3fd04888cb8cb25e6e9677f1",
     "packages": [
         {
             "name": "brick/math",
@@ -435,16 +435,16 @@
         },
         {
             "name": "framesnpictures/el-helper",
-            "version": "v0.6",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FramesNPictures/el-helper.git",
-                "reference": "a8094562f16fc92fbfb4f99e31dc58e62162378b"
+                "reference": "edf2b285c8671e5e3e604de83ba4c78888f903a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FramesNPictures/el-helper/zipball/a8094562f16fc92fbfb4f99e31dc58e62162378b",
-                "reference": "a8094562f16fc92fbfb4f99e31dc58e62162378b",
+                "url": "https://api.github.com/repos/FramesNPictures/el-helper/zipball/edf2b285c8671e5e3e604de83ba4c78888f903a9",
+                "reference": "edf2b285c8671e5e3e604de83ba4c78888f903a9",
                 "shasum": ""
             },
             "require": {
@@ -454,6 +454,7 @@
                 "orchestra/testbench": ">=6",
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -473,9 +474,9 @@
             "description": "Re-usable Helper Objects",
             "support": {
                 "issues": "https://github.com/FramesNPictures/el-helper/issues",
-                "source": "https://github.com/FramesNPictures/el-helper/tree/v0.6"
+                "source": "https://github.com/FramesNPictures/el-helper/tree/develop"
             },
-            "time": "2022-02-11T17:17:36+00:00"
+            "time": "2023-02-02T18:26:08+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -1461,29 +1462,30 @@
         },
         {
             "name": "nette/utils",
-            "version": "v3.2.9",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c"
+                "reference": "cacdbf5a91a657ede665c541eda28941d4b09c1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c",
-                "reference": "c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c",
+                "url": "https://api.github.com/repos/nette/utils/zipball/cacdbf5a91a657ede665c541eda28941d4b09c1e",
+                "reference": "cacdbf5a91a657ede665c541eda28941d4b09c1e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2 <8.3"
+                "php": ">=8.0 <8.3"
             },
             "conflict": {
-                "nette/di": "<3.0.6"
+                "nette/finder": "<3",
+                "nette/schema": "<1.2.2"
             },
             "require-dev": {
                 "jetbrains/phpstorm-attributes": "dev-master",
-                "nette/tester": "~2.0",
+                "nette/tester": "^2.4",
                 "phpstan/phpstan": "^1.0",
-                "tracy/tracy": "^2.3"
+                "tracy/tracy": "^2.9"
             },
             "suggest": {
                 "ext-gd": "to use Image",
@@ -1497,7 +1499,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "4.0-dev"
                 }
             },
             "autoload": {
@@ -1541,9 +1543,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v3.2.9"
+                "source": "https://github.com/nette/utils/tree/v4.0.0"
             },
-            "time": "2023-01-18T03:26:20+00:00"
+            "time": "2023-02-02T10:41:53+00:00"
         },
         {
             "name": "nunomaduro/termwind",
@@ -7648,7 +7650,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "framesnpictures/el-helper": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

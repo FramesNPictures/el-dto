@@ -1,222 +1,92 @@
 <?php
 
-use Fnp\Dto\DtoLegacy;
+use Fnp\Dto\Dto;
+use PHPUnit\Framework\TestCase;
 
-class DtoFillTest
+class DtoFillTest extends TestCase
 {
-    /**
-     * @return array[]
-     * @todo Add additional acceptable attribute types
-     */
     public function provideFillData()
     {
-        $basicModel = new class() {
-            public    $pub = null;
-            protected $pro = null;
-            private   $pri = null;
+        $simpleUserModel = new class {
+            public           $name;
+            public           $surname;
+            protected string $email;
+            protected bool   $active = false;
 
-            public function toArray()
+            // Check if the properties are a match
+            public function check(array $data)
             {
-                return [
-                    'pub' => $this->pub,
-                    'pro' => $this->pro,
-                    'pri' => $this->pri,
-                ];
-            }
-        };
+                foreach ($data as $prop => $value) {
+                    if ($this->{$prop} !== $value) {
+                        return false;
+                    }
+                }
 
-        $fillModel = new class() {
-            public    $pub = 'pub';
-            protected $pro = null;
-            private   $pri = null;
-
-            public function fillPub($value)
-            {
-                return 'PubFill '.$value;
-            }
-
-            public function fillPro($value)
-            {
-                return 'ProFill '.$value;
-            }
-
-            public function fillPri($value)
-            {
-                return 'PriFill '.$value;
-            }
-
-            public function fillTst($value)
-            {
-                return $value;
-            }
-
-            public function toArray()
-            {
-                return [
-                    'pub' => $this->pub,
-                    'pro' => $this->pro,
-                    'pri' => $this->pri,
-                ];
+                return true;
             }
         };
 
         return [
-
-            /*
-             * Basic Fill (Array)
-             * ----------
-             * Whenever property name and array key matches
-             * value should be assigned
-             */
-            'Array All' => [
-                clone $basicModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
-                    'pru' => 'Should not be assigned',
+            'Simple Fill'             => [
+                'mod' => clone $simpleUserModel,
+                'dat' => [
+                    'name'    => 'John',
+                    'surname' => 'Doe',
+                    'email'   => 'jd@gmail.com',
+                    'active'  => true,
                 ],
-                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::INCLUDE_PRIVATE,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
+                'map' => null,
+                'res' => [
+                    'name'    => 'John',
+                    'surname' => 'Doe',
+                    'email'   => 'jd@gmail.com',
+                    'active'  => true,
                 ],
             ],
-            'Array Protected' => [
-                clone $basicModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
-                    'prg' => 'Should not be assigned'
+            'Simple Fill Mapped'      => [
+                'mod' => clone $simpleUserModel,
+                'dat' => [
+                    'theName'    => 'John',
+                    'theSurname' => 'Doe',
+                    'theEmail'   => 'jd@gmail.com',
+                    'theActive'  => true,
                 ],
-                DtoLegacy::INCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PRIVATE,
-                [
-                    'pub' => null,
-                    'pro' => 'Protected Property',
-                    'pri' => null,
+                'map' => [
+                    'name'    => 'theName',
+                    'surname' => 'theSurname',
+                    'email'   => 'theEmail',
+                    'active'  => 'theActive',
                 ],
-            ],
-            'Array Private' => [
-                clone $basicModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
-                ],
-                DtoLegacy::INCLUDE_PRIVATE + DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED,
-                [
-                    'pub' => null,
-                    'pro' => null,
-                    'pri' => 'Private Property',
+                'res' => [
+                    'name'    => 'John',
+                    'surname' => 'Doe',
+                    'email'   => 'jd@gmail.com',
+                    'active'  => true,
                 ],
             ],
-            'Array Public' => [
-                clone $basicModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
+            'Mapped Multidimensional' => [
+                'mod' => clone $simpleUserModel,
+                'dat' => [
+                    'userData' => [
+                        'name' => 'John',
+                        'surn' => 'Doe',
+                        'mail' => 'jd@gmail.com',
+                    ],
+                    'userMeta' => [
+                        'act' => true,
+                    ],
                 ],
-                DtoLegacy::INCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => null,
-                    'pri' => null,
+                'map' => [
+                    'name'    => 'userData.name',
+                    'surname' => 'userData.surn',
+                    'email'   => 'userData.mail',
+                    'active'  => 'userMeta.act',
                 ],
-            ],
-
-            /* Advanced Fill (Array)
-             * -------------
-             * If property name and key matches and
-             * fill method exists result of fill method execution
-             * should be filled to property.
-             */
-
-            'Fill Array All' => [
-                clone $fillModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
-                    'tst' => 'Should not be filled',
-                ],
-                0, // Default behaviour
-                [
-                    'pub' => 'PubFill Public Property',
-                    'pro' => 'ProFill Protected Property',
-                    'pri' => 'PriFill Private Property',
-                ],
-            ],
-            'Fill Array Protected' => [
-                clone $fillModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
-                ],
-                DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PRIVATE,
-                [
-                    'pub' => 'pub',
-                    'pro' => 'ProFill Protected Property',
-                    'pri' => null,
-                ],
-            ],
-            'Fill Array Private' => [
-                clone $fillModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
-                ],
-                DtoLegacy::EXCLUDE_PUBLIC + DtoLegacy::EXCLUDE_PROTECTED,
-                [
-                    'pub' => 'pub',
-                    'pro' => null,
-                    'pri' => 'PriFill Private Property',
-                ],
-            ],
-            'Fill Array Public' => [
-                clone $fillModel,
-                [
-                    'pub' => 'Public Property',
-                    'pro' => 'Protected Property',
-                    'pri' => 'Private Property',
-                ],
-                DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
-                [
-                    'pub' => 'PubFill Public Property',
-                    'pro' => null,
-                    'pri' => null,
-                ],
-            ],
-
-            /*
-             * Include & Exclude Nulls
-             */
-            'Fill Including Nulls' => [
-                clone $fillModel,
-                [
-                    'pub' => null,
-                ],
-                DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE,
-                [
-                    'pub' => 'PubFill ',
-                    'pro' => null,
-                    'pri' => null,
-                ],
-            ],
-            'Fill Excluding Nulls' => [
-                clone $fillModel,
-                [
-                    'pub' => null,
-                ],
-                DtoLegacy::EXCLUDE_PROTECTED + DtoLegacy::EXCLUDE_PRIVATE + DtoLegacy::EXCLUDE_NULLS,
-                [
-                    'pub' => 'pub',
-                    'pro' => null,
-                    'pri' => null,
+                'res' => [
+                    'name'    => 'John',
+                    'surname' => 'Doe',
+                    'email'   => 'jd@gmail.com',
+                    'active'  => true,
                 ],
             ],
         ];
@@ -224,17 +94,10 @@ class DtoFillTest
 
     /**
      * @dataProvider provideFillData
-     *
-     * @param $model
-     * @param $data
-     * @param $flags
-     * @param $result
-     *
-     * @throws \Fnp\ElHelper\Exceptions\CouldNotAccessProperties
      */
-    public function testFillingModel($model, $data, $flags, $result)
+    public function testFillFunctionality($mod, $dat, $map, $res)
     {
-        DtoLegacy::fill($model, $data, $flags);
-        $this->assertEquals($result, $model->toArray());
+        $model = Dto::fill($mod, $dat, $map);
+        $this->assertTrue($mod->check($res), 'Results do not match.');
     }
 }

@@ -7,6 +7,7 @@ use Fnp\Dto\Contracts\ModifiesDtoValue;
 use Fnp\Dto\Contracts\ObtainsValue;
 use Fnp\ElHelper\Arr;
 use Fnp\ElHelper\Iof;
+use Fnp\ElHelper\Obj;
 
 class Dto
 {
@@ -40,11 +41,7 @@ class Dto
             $data = get_object_vars($data);
         }
 
-        $vars = self::properties(
-            $model,
-            self::INCLUDE_PUBLIC + self::INCLUDE_PROTECTED + self::INCLUDE_PRIVATE,
-            $flags
-        );
+        $vars = Obj::properties($model);
 
         foreach ($vars as $variable) {
             $variable->setAccessible(true);
