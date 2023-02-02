@@ -11,7 +11,7 @@ class DtoFillTest extends TestCase
             public           $name;
             public           $surname;
             protected string $email;
-            protected bool   $active = false;
+            private bool     $active = false;
 
             // Check if the properties are a match
             public function check(array $data)
@@ -42,6 +42,11 @@ class DtoFillTest extends TestCase
                     'email'   => 'jd@gmail.com',
                     'active'  => true,
                 ],
+                'arr' => [
+                    'name'    => 'John',
+                    'surname' => 'Doe',
+                    'email'   => 'jd@gmail.com',
+                ],
             ],
             'Simple Fill Mapped'      => [
                 'mod' => clone $simpleUserModel,
@@ -62,6 +67,11 @@ class DtoFillTest extends TestCase
                     'surname' => 'Doe',
                     'email'   => 'jd@gmail.com',
                     'active'  => true,
+                ],
+                'arr' => [
+                    'name'    => 'John',
+                    'surname' => 'Doe',
+                    'email'   => 'jd@gmail.com',
                 ],
             ],
             'Mapped Multidimensional' => [
@@ -88,6 +98,11 @@ class DtoFillTest extends TestCase
                     'email'   => 'jd@gmail.com',
                     'active'  => true,
                 ],
+                'arr' => [
+                    'name'    => 'John',
+                    'surname' => 'Doe',
+                    'email'   => 'jd@gmail.com',
+                ],
             ],
         ];
     }
@@ -95,9 +110,18 @@ class DtoFillTest extends TestCase
     /**
      * @dataProvider provideFillData
      */
-    public function testFillFunctionality($mod, $dat, $map, $res)
+    public function testFillFunctionality($mod, $dat, $map, $res, $arr)
     {
         $model = Dto::fill($mod, $dat, $map);
         $this->assertTrue($mod->check($res), 'Results do not match.');
+    }
+
+    /**
+     * @dataProvider provideFillData
+     */
+    public function testToArrayFunctionality($mod, $dat, $map, $res, $arr)
+    {
+        $model = Dto::fill($mod, $dat, $map);
+        $this->assertEquals($arr, Dto::toArray($mod), 'toArray results do not match.');
     }
 }
