@@ -4,7 +4,7 @@ namespace Fnp\Dto;
 
 use Fnp\Dto\Contracts\AccessesDtoModel;
 use Fnp\Dto\Contracts\ModifiesDtoValue;
-use Fnp\Dto\Contracts\ObtainsValue;
+use Fnp\Dto\Contracts\ReturnsValue;
 use Fnp\Dto\Exceptions\DtoClassNotExistsException;
 use Fnp\ElHelper\Arr;
 use Fnp\ElHelper\Exceptions\CouldNotAccessProperties;
@@ -105,7 +105,7 @@ class DtoLegacy
                     $attribute->setModel($model);
                 }
 
-                if ($attribute instanceof ObtainsValue) {
+                if ($attribute instanceof ReturnsValue) {
                     $varValue = $attribute->getValue($data);
                 }
 

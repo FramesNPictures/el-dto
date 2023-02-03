@@ -2,7 +2,7 @@
 
 namespace Fnp\Dto\Contracts;
 
-interface ObtainsValue
+interface ReturnsValue
 {
     /**
      * Obtains the value from the provided single

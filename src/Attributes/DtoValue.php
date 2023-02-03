@@ -3,30 +3,28 @@
 namespace Fnp\Dto\Attributes;
 
 use Attribute;
-use Fnp\Dto\Contracts\ObtainsValue;
+use Fnp\Dto\Contracts\ReturnsValue;
 use Fnp\ElHelper\Arr;
 
 #[Attribute]
-class DtoValue implements ObtainsValue
+class DtoValue implements ReturnsValue
 {
-    protected $path;
-    protected $default = null;
+    protected array $path;
+    protected mixed $default = null;
 
     public function __construct(
-        $path,
-        $default = null,
+        string $path,
+        mixed $default = null,
     ) {
-        $this->path    = (array)$path;
+        $this->path    = (array) $path;
         $this->default = $default;
     }
 
     public function getValue(mixed $data): mixed
     {
-        $value = null;
-
-        foreach($this->path as $path) {
+        foreach ($this->path as $path) {
             $value = Arr::get($data, $path);
-            if (!is_null($value)) {
+            if ( ! is_null($value)) {
                 return $value;
             }
         }

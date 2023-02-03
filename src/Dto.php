@@ -2,9 +2,12 @@
 
 namespace Fnp\Dto;
 
+use Fnp\Dto\Contracts\AccessesDtoData;
 use Fnp\Dto\Contracts\AccessesDtoModel;
+use Fnp\Dto\Contracts\AccessesDtoPropertyName;
 use Fnp\Dto\Contracts\ModifiesDtoValue;
-use Fnp\Dto\Contracts\ObtainsValue;
+use Fnp\Dto\Contracts\ReturnsValue;
+use Fnp\Dto\Contracts\SetsDtoValue;
 use Fnp\Dto\Exceptions\DtoClassNotExistsException;
 use Fnp\ElHelper\Arr;
 use Fnp\ElHelper\Flg;
@@ -87,22 +90,6 @@ class Dto
             $varName  = $variable->getName();
             $varValue = null;
 
-            foreach ($variable->getAttributes() as $attrReflection) {
-                $attribute = $attrReflection->newInstance();
-
-                if ($attribute instanceof AccessesDtoModel) {
-                    $attribute->setModel($model);
-                }
-
-                if ($attribute instanceof ObtainsValue) {
-                    $varValue = $attribute->getValue($data);
-                }
-
-                if ($attribute instanceof ModifiesDtoValue) {
-                    $varValue = $attribute->modifyValue($varValue);
-                }
-            }
-
             // No map provided -> try direct grab
             if (is_null($varValue) && is_null($map)) {
                 $varValue = Arr::get($data, $varName);
@@ -113,6 +100,35 @@ class Dto
                 $mappedVarName = Arr::get($map, $varName);
                 if ( ! is_null($mappedVarName)) {
                     $varValue = Arr::get($data, $mappedVarName);
+                }
+            }
+
+            foreach ($variable->getAttributes() as $attrReflection) {
+                $attribute = $attrReflection->newInstance();
+
+                if ($attribute instanceof AccessesDtoModel) {
+                    $attribute->setModel($model);
+                }
+
+                if ($attribute instanceof AccessesDtoData) {
+                    $attribute->setData($data);
+                }
+
+                if ($attribute instanceof AccessesDtoPropertyName) {
+                    $attribute->setPropertyName($varName);
+                }
+
+                if ($attribute instanceof ReturnsValue) {
+                    $varValue = $attribute->getValue($data);
+                }
+
+                if ($attribute instanceof ModifiesDtoValue) {
+                    $varValue = $attribute->modifyValue($varValue);
+                }
+
+                if ($attribute instanceof SetsDtoValue) {
+                    $attribute->setValue($varValue);
+                    $varValue = $variable->getValue($model);
                 }
             }
 
@@ -185,5 +201,15 @@ class Dto
         }
 
         return $array;
+    }
+
+    public static function toJson(object $model, int $flags = 0): string
+    {
+        $jsonFlags = 0;
+        if (Flg::has($flags, self::JSON_PRETTY)) {
+            $jsonFlags = Flg::set($jsonFlags, JSON_PRETTY_PRINT);
+        }
+
+        return json_encode(self::toArray($model, $flags), $jsonFlags);
     }
 }

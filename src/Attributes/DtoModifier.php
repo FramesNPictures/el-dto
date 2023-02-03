@@ -3,19 +3,28 @@
 namespace Fnp\Dto\Attributes;
 
 use Attribute;
+use Fnp\Dto\Contracts\AccessesDtoData;
 use Fnp\Dto\Contracts\AccessesDtoModel;
 use Fnp\Dto\Contracts\ModifiesDtoValue;
+use Fnp\Dto\Dto;
+use Fnp\Dto\Exceptions\DtoException;
+use Fnp\Dto\Exceptions\DtoMethodNotExists;
+use Fnp\ElHelper\Obj;
 
 #[Attribute]
 class DtoModifier implements ModifiesDtoValue, AccessesDtoModel
 {
     protected mixed  $method;
+    protected mixed  $data;
     protected object $model;
+    protected array  $params;
 
     public function __construct(
-        mixed $method
+        mixed $method,
+        ...$params
     ) {
         $this->method = $method;
+        $this->params = $params;
     }
 
     public function setModel(object $model): void
@@ -28,14 +37,10 @@ class DtoModifier implements ModifiesDtoValue, AccessesDtoModel
         $model  = $this->model;
         $method = $this->method;
 
-        if ($method instanceof AccessesDtoModel) {
-            $method->setModel($model);
+        if ( ! method_exists($this->model, $this->method)) {
+            throw DtoMethodNotExists::make($this->method);
         }
 
-        if ($method instanceof ModifiesDtoValue) {
-            return $method->modifyValue($value);
-        }
-
-        return $model->$method($value);
+        return $model->$method($value, ...$this->params);
     }
 }
