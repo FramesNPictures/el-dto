@@ -12,7 +12,6 @@ use Fnp\ElHelper\Flg;
 use Fnp\ElHelper\Iof;
 use Fnp\ElHelper\Obj;
 use Illuminate\Support\Collection;
-use ReflectionClass;
 use ReflectionProperty;
 
 class DtoLegacy

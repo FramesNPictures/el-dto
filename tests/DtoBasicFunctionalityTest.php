@@ -28,23 +28,28 @@ class DtoBasicFunctionalityTest extends TestCase
 
         $attributeModel = new class {
             #[\Fnp\Dto\Attributes\DtoValue('theName')]
-            public           $name;
+            public $name;
+
             #[\Fnp\Dto\Attributes\DtoValue('theSurname')]
             #[\Fnp\Dto\Attributes\DtoModifier('capitalize', '-test')]
-            public           $surname;
+            public $surname;
+
             #[\Fnp\Dto\Attributes\DtoValue('theEmail')]
             #[\Fnp\Dto\Modifiers\DtoTrim()]
             #[\Fnp\Dto\Modifiers\DtoLowerCase()]
             protected string $email;
+
             #[\Fnp\Dto\Attributes\DtoValue('address')]
             #[\Fnp\Dto\Attributes\DtoSetter('setAddress', 1)]
-            private string   $address1;
+            private string $address1;
+
             #[\Fnp\Dto\Attributes\DtoValue('address')]
             #[\Fnp\Dto\Attributes\DtoSetter('setAddress', 2)]
-            private string   $address2;
+            private string $address2;
+
             #[\Fnp\Dto\Attributes\DtoValue('isActive')]
             #[\Fnp\Dto\Attributes\DtoDefaultValue(true)]
-            private bool     $active = false;
+            private bool $active = false;
 
             // Check if the properties are a match
             public function check(array $data)
@@ -58,11 +63,13 @@ class DtoBasicFunctionalityTest extends TestCase
                 return true;
             }
 
+            // Capitalize the value and add extra at the end
             public function capitalize(string $value, string $extra): string
             {
                 return strtoupper($value . $extra);
             }
 
+            // Unpack and set the address line
             public function setAddress(string $address, int $line)
             {
                 $lines                     = explode(',', $address);

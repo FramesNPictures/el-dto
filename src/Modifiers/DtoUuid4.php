@@ -11,7 +11,7 @@ class DtoUuid4 implements ModifiesDtoValue
 {
     public function modifyValue(mixed $value): mixed
     {
-        if (!is_null($value)) {
+        if ( ! is_null($value)) {
             return $value;
         }
 

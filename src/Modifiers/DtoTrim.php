@@ -1,6 +1,7 @@
 <?php
 
 namespace Fnp\Dto\Modifiers;
+
 use Attribute;
 use Fnp\Dto\Contracts\ModifiesDtoValue;
 

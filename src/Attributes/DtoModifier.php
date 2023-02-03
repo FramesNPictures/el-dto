@@ -3,13 +3,9 @@
 namespace Fnp\Dto\Attributes;
 
 use Attribute;
-use Fnp\Dto\Contracts\AccessesDtoData;
 use Fnp\Dto\Contracts\AccessesDtoModel;
 use Fnp\Dto\Contracts\ModifiesDtoValue;
-use Fnp\Dto\Dto;
-use Fnp\Dto\Exceptions\DtoException;
 use Fnp\Dto\Exceptions\DtoMethodNotExists;
-use Fnp\ElHelper\Obj;
 
 #[Attribute]
 class DtoModifier implements ModifiesDtoValue, AccessesDtoModel
