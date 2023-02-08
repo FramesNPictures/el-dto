@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ecfad2a3fd04888cb8cb25e6e9677f1",
+    "content-hash": "00f9656c0e87d46ae90be574397afb76",
     "packages": [
         {
             "name": "brick/math",
@@ -435,16 +435,16 @@
         },
         {
             "name": "framesnpictures/el-helper",
-            "version": "dev-develop",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FramesNPictures/el-helper.git",
-                "reference": "0aa83b7b8111259109026faa0a65cd4faa9198f6"
+                "reference": "612550d2b5324a3ad13e8e3c6abee4a13a16b4ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FramesNPictures/el-helper/zipball/0aa83b7b8111259109026faa0a65cd4faa9198f6",
-                "reference": "0aa83b7b8111259109026faa0a65cd4faa9198f6",
+                "url": "https://api.github.com/repos/FramesNPictures/el-helper/zipball/612550d2b5324a3ad13e8e3c6abee4a13a16b4ec",
+                "reference": "612550d2b5324a3ad13e8e3c6abee4a13a16b4ec",
                 "shasum": ""
             },
             "require": {
@@ -454,7 +454,6 @@
                 "orchestra/testbench": ">=6",
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -471,12 +470,12 @@
                     "email": "chris@cynarski.net"
                 }
             ],
-            "description": "Re-usable Helper Objects",
+            "description": "Re-usable Helper Libraries",
             "support": {
                 "issues": "https://github.com/FramesNPictures/el-helper/issues",
-                "source": "https://github.com/FramesNPictures/el-helper/tree/develop"
+                "source": "https://github.com/FramesNPictures/el-helper/tree/v1.0"
             },
-            "time": "2023-02-02T20:37:47+00:00"
+            "time": "2023-02-08T00:55:00+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -7650,9 +7649,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "framesnpictures/el-helper": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
