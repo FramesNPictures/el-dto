@@ -1,6 +1,7 @@
 {
   "name": "framesnpictures/el-dto",
-  "description": "Universal Data Transport Objects",
+  "description": "Data Objects Helper Library",
+  "license": "MIT",
   "authors": [
     {
       "name": "Chris Cynarski",
