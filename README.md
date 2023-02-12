@@ -22,5 +22,27 @@ Overall, data objects play a crucial role in modern programming style by providi
 and process data. They are used in a wide range of applications, from databases and web applications to scientific
 simulations and artificial intelligence systems.
 
+## Mapping library
 
+### Filling object with data
+
+#### Without mapping
+
+#### With explicit mapping
+
+#### Using attributes
+
+##### Picking the value
+
+##### Default value
+
+##### Sub-model
+
+##### Using modifier
+
+##### Using setter
+
+### Converting to Array
+
+### Converting to Json
 
