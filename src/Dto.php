@@ -90,6 +90,11 @@ class Dto
             $varName  = $variable->getName();
             $varValue = null;
 
+            // Map provided, but variable not on the list - ignore
+            if (!is_null($map) && !isset($map[$varName])) {
+                continue;
+            }
+
             // No map provided -> try direct grab
             if (is_null($varValue) && is_null($map)) {
                 $varValue = Arr::get($data, $varName);
