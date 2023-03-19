@@ -69,6 +69,8 @@ class Dto
         mixed $map = null,
     ): object {
 
+        $originalData = $data;
+
         if (is_null($data)) {
             return $model;
         }
@@ -106,7 +108,7 @@ class Dto
 
                 if ( $mappedVarName instanceof \Closure) {
                     // If the map value is the closure -> assign the result
-                    $varValue = $mappedVarName($model);
+                    $varValue = $mappedVarName($originalData);
                 } elseif ( ! is_null($mappedVarName)) {
                     // Otherwise -> assign the mapped value
                     $varValue = Arr::get($data, $mappedVarName);
