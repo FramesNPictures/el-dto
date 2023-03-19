@@ -9,10 +9,10 @@ use Fnp\Dto\Contracts\ModifiesDtoValue;
 use Fnp\Dto\Contracts\ReturnsValue;
 use Fnp\Dto\Contracts\SetsDtoValue;
 use Fnp\Dto\Exceptions\DtoClassNotExistsException;
-use Fnp\ElHelper\Arr;
-use Fnp\ElHelper\Flg;
-use Fnp\ElHelper\Iof;
-use Fnp\ElHelper\Obj;
+use Fnp\Helper\Arr;
+use Fnp\Helper\Flg;
+use Fnp\Helper\Iof;
+use Fnp\Helper\Obj;
 use Illuminate\Support\Collection;
 
 class Dto
@@ -103,7 +103,12 @@ class Dto
             // Map provided -> try grab by mapped name
             if (is_null($varValue) && ! is_null($map)) {
                 $mappedVarName = Arr::get($map, $varName);
-                if ( ! is_null($mappedVarName)) {
+
+                if ( $mappedVarName instanceof \Closure) {
+                    // If the map value is the closure -> assign the result
+                    $varValue = $mappedVarName($model);
+                } elseif ( ! is_null($mappedVarName)) {
+                    // Otherwise -> assign the mapped value
                     $varValue = Arr::get($data, $mappedVarName);
                 }
             }
