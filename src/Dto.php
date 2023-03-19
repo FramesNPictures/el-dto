@@ -9,10 +9,10 @@ use Fnp\Dto\Contracts\ModifiesDtoValue;
 use Fnp\Dto\Contracts\ReturnsValue;
 use Fnp\Dto\Contracts\SetsDtoValue;
 use Fnp\Dto\Exceptions\DtoClassNotExistsException;
-use Fnp\Helper\Arr;
-use Fnp\Helper\Flg;
-use Fnp\Helper\Iof;
-use Fnp\Helper\Obj;
+use Fnp\ElHelper\Arr;
+use Fnp\ElHelper\Flg;
+use Fnp\ElHelper\Iof;
+use Fnp\ElHelper\Obj;
 use Illuminate\Support\Collection;
 
 class Dto
